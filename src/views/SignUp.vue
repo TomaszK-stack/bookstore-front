@@ -13,16 +13,16 @@
                     </div>
 
                     <div class="field">
-                        <label>Password</label>
+                        <label>Email</label>
                         <div class="control">
-                            <input type="password" class="input" v-model="password">
+                            <input type="text" class="input" v-model="email">
                         </div>
                     </div>
 
                     <div class="field">
-                        <label>Repeat password</label>
+                        <label>Password</label>
                         <div class="control">
-                            <input type="password" class="input" v-model="password2">
+                            <input type="password" class="input" v-model="password">
                         </div>
                     </div>
 
@@ -55,7 +55,7 @@ export default {
         return {
             username: '',
             password: '',
-            password2: '',
+            email: '',
             errors: []
         }
     },
@@ -67,22 +67,18 @@ export default {
                 this.errors.push('The username is missing')
             }
 
-            if (this.password === '') {
-                this.errors.push('The password is too short')
-            }
-
-            if (this.password !== this.password2) {
-                this.errors.push('The passwords doesn\'t match')
-            }
+    
 
             if (!this.errors.length) {
                 const formData = {
+                    email: this.email,
                     username: this.username,
                     password: this.password
                 }
+                console.log(formData)
 
                 axios
-                    .post("/api/v1/users/", formData)
+                    .post("/api/v1/auth/register", formData)
                     .then(response => {
                         toast({
                             message: 'Account created, please log in!',

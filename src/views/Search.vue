@@ -10,7 +10,8 @@
             <ProductBox 
                 v-for="product in products"
                 v-bind:key="product.id"
-                v-bind:product="product" />
+                v-bind:product="product"
+             />
         </div>
     </div>
 </template>
@@ -26,6 +27,7 @@ export default {
     },
     data() {
         return {
+            proddict: {},
             products: [],
             query: ''
         }
@@ -44,12 +46,29 @@ export default {
     },
     methods: {
         async performSearch() {
+            const myHandler = {
+                get: function(target, prop) {
+                    return target[prop];
+                },
+                set: function(target, prop, value) {
+                    console.log(`Ustawiam wartość ${prop} na ${value}`);
+                    target[prop] = value;
+                    return true;
+                }
+                };
+                        
+
             this.$store.commit('setIsLoading', true)
 
             await axios
-                .post('/api/v1/products/search/', {'query': this.query})
+                .get('/api/v1/books/list')
                 .then(response => {
-                    this.products = response.data
+                    
+
+                            this.proddict = response.data
+                            this.products = Object.values(this.proddict)
+                            
+
                 })
                 .catch(error => {
                     console.log(error)
